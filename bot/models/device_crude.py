@@ -2,14 +2,13 @@ from .device_model import Device, UrlDevice, LogDevice
 from shemas import shemas_device
 from bot.config import config_db
 
-from sqlalchemy.orm import Session
 
 
 # Сохранение имени устройства и его url
 def create_device_and_url(name):
     device = Device(name=name)
     config_db.get_db(device)
-    return device.name
+    return device
 
 
 # Сохранение url устройства
