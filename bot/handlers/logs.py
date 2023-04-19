@@ -15,7 +15,7 @@ def find_value(func):
         if message.text == "" or message.text in COMMAND_LIST:
             await message.answer("Пошел к черту, шалун ебаный", reply=True)
         else:
-            await func()
+            await func(message, state)
     return validate
 
 
@@ -24,6 +24,7 @@ async def index(message: types.Message):
     await message.answer("Привет.\nЧто бы зарегистрировать API придумай ему имя.")
 
 
+@find_value
 async def create_name(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['name'] = message.text
@@ -32,9 +33,6 @@ async def create_name(message: types.Message, state: FSMContext):
 
 
 async def create_url_device(message: types.Message, state: FSMContext):
-    if message.text == "" or message.text in COMMAND_LIST:
-        await message.answer("Пошел к черту, шалун ебаный", reply=True)
-    else:
         async with state.proxy() as data:
             data['url'] = message.text
         await device_group.Device.next()
