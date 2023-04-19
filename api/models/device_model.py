@@ -15,10 +15,12 @@ class Device(Base):
 
 
 class UrlDevice(Base):
+    """error_flag отвечает за получение только ошибок 0 получает все, 1 только error и warrning"""
     __tablename__ = "url"
 
     id = Column(Integer, primary_key=True)
     url = Column(String, nullable=False)
+    error_flag = Column(Integer, default=0)
     device_id = Column(Integer, ForeignKey("device.id"))
 
     devices = relationship("Device", back_populates="url_devices")
