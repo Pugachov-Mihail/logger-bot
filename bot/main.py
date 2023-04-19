@@ -13,6 +13,7 @@ if __name__ == '__main__':
     dp.register_message_handler(logs.index, commands=["start", "add"], state=None)
     dp.register_message_handler(logs.get_info_find_name, commands="get_info")
     dp.register_message_handler(logs.edit, commands="edit")
+    dp.register_message_handler(logs.reset_state, commands="reset", state=[device_group.FindDevice.name, device_group.Device.name, device_group.Device.url, device_group.Device.url_error])
     dp.register_message_handler(logs.get_log_info, state=device_group.FindDevice.name)
     dp.register_message_handler(logs.create_name, state=device_group.Device.name)
     dp.register_message_handler(logs.create_url_device, state=device_group.Device.url)

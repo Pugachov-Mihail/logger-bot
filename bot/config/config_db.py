@@ -28,4 +28,5 @@ def get_db(atr=None):
         db.rollback()
     finally:
         db.close()
+        return atr
 
