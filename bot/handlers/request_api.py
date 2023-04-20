@@ -2,8 +2,8 @@ import requests
 
 from datetime import datetime
 
-from bot.config import config_db
-from bot.models.device_model import LogDevice
+from config import config_db
+from models.device_model import LogDevice
 
 
 def get_history(url, device_id, offset=None, db=config_db.session):

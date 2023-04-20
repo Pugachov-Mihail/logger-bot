@@ -1,9 +1,9 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
-from bot.handlers.request_api import get_history
-from bot.models import device_crude
-from bot.states import device_group
+from handlers.request_api import get_history
+from models import device_crude
+from states import device_group
 
 COMMAND_LIST = ["/start", "/add", "/edit", "/get_info"]
 

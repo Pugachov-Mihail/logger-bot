@@ -1,6 +1,6 @@
 from .device_model import Device, UrlDevice, LogDevice
 from shemas import shemas_device
-from bot.config import config_db
+from config import config_db
 
 
 # Сохранение имени устройства и его url
