@@ -13,3 +13,5 @@ class FindDevice(StatesGroup):
     name = State()
 
 
+class FindLogsDevice(StatesGroup):
+    name = State()

@@ -17,16 +17,15 @@ def create_url_device(url, device):
     return url.id
 
 
-def create_url_error(device, url_error, db=config_db.session):
+def create_url_error(device, url_error):
     if url_error is not None:
-        api = db.query(UrlDevice).filter(UrlDevice.device_id == device.id)
-        if api.scalar() is not None:
-            api.update({
-                UrlDevice.error_flag: 1,
-                UrlDevice.url: url_error
-            })
-            db.commit()
-            return True
+        url = UrlDevice(
+            url=url_error,
+            error_flag=1,
+            device_id=device.id
+        )
+        config_db.get_db(url)
+        return True
     else:
         return False
 
@@ -36,26 +35,13 @@ def get_all(db=config_db.session):
     return [i for i in device if i.log_devices or i.url_devices]
 
 
-# Сохранение логов
-def create_log_device(logs_shema: shemas_device.LogDevice, device: shemas_device.Device):
-    logs = LogDevice(
-        level=logs_shema.level,
-        category=logs_shema.category,
-        log_time=logs_shema.log_time,
-        prefix=logs_shema.prefix,
-        message=logs_shema.message,
-        device_id=device)
-    config_db.get_db(logs)
-    return logs
-
-
 def get_all_logs_device(db=config_db.session):
     device = db.query(Device).all()
     return [i for i in device if i.log_devices]
 
 
 def get_current_device(name, db=config_db.session):
-    if name == "":
+    if name != "":
         devices = db.query(Device).join(UrlDevice).filter(Device.name == name)
         if devices.scalar is not None:
             device = devices.first()
@@ -81,4 +67,25 @@ def edit_url_device(name, url, id, db=config_db.session):
             return False
     else:
         return False
+
+
+def find_logs_url(name, db=config_db.session):
+    device = db.query(UrlDevice).join(Device).filter(Device.name == name)
+    if device.scalar is not None:
+        device_url = device.first()
+        return device_url
+    else:
+        return None
+
+
+def find_end_log(name, db=config_db.session):
+    logs = db.query(LogDevice).filter(LogDevice.device_id == name).order_by(LogDevice.id.desc())
+
+    if logs.scalar is not None:
+        log = logs.first()
+        return log
+    else:
+        return None
+
+
 

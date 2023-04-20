@@ -33,6 +33,7 @@ class LogDevice(Base):
     level = Column(String)
     category = Column(String)
     log_time = Column(String)
+    data_time_log = Column(String)
     prefix = Column(String)
     message = Column(String)
 

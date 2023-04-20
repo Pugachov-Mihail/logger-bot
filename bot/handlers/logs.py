@@ -1,6 +1,7 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
+from bot.handlers.request_api import get_history
 from bot.models import device_crude
 from bot.states import device_group
 
@@ -41,10 +42,12 @@ async def create_url_device(message: types.Message, state: FSMContext):
 async def create_url_error(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['url_error'] = message.text
+
     async with state.proxy() as data:
         name = data['name']
         url = data['url']
         url_error = data['url_error']
+
     await state.finish()
 
     if name == '' and url == '':
@@ -56,13 +59,12 @@ async def create_url_error(message: types.Message, state: FSMContext):
         await message.answer("Сохранил.")
 
 
-@find_value
 async def get_info_find_name(message: types.Message):
     await device_group.FindDevice.name.set()
-    await message.answer("Что бы получить информацию об API введи его имя:")
+    await message.answer("Что бы получить информацию об API введи его имя без пробела:")
 
 
-async def get_log_info(message: types.Message, state: FSMContext):
+async def get_api_info(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['name'] = message.text
 
@@ -75,7 +77,7 @@ async def get_log_info(message: types.Message, state: FSMContext):
         await message.answer("Дружок, мне кажется ты ошибся.")
     else:
         for url in current_device:
-            await message.answer(f"ID URL: {url.id},\n"
+            await message.answer(f"ID по которому можно изменить: {url.id},\n"
                                  f"URL: {url.url}")
 
 
@@ -92,6 +94,33 @@ async def edit(message: types.Message):
             await message.answer("Сохранил.")
         else:
             await message.answer("Парень, что то ты не так делаешь.")
+
+
+async def get_logs_api(message: types.Message):
+    await device_group.FindLogsDevice.name.set()
+    await message.answer("Что бы получить историю логов напиши имя API")
+
+
+async def get_name_find_log(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['name'] = message.text
+
+    async with state.proxy() as data:
+        name = data['name']
+    url = device_crude.find_logs_url(name.upper())
+
+    logs = device_crude.find_end_log(url.device_id)
+
+    if url is not None:
+        if logs is not None:
+            get_history(url.url, device_id=url.device_id, offset=logs.log_time)
+            await message.answer("Сохранил.")
+        else:
+            get_history(url.url, device_id=url.device_id)
+            await message.answer("Сохранил.")
+    else:
+        await message.answer("Такого API нет.")
+    await state.finish()
 
 
 async def reset_state(message: types.Message, state: FSMContext):

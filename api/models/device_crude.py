@@ -46,3 +46,4 @@ def create_log_device(db: Session, logs_shema: shemas_device.LogDevice, device: 
 def get_all_logs_device(db: Session):
     device = db.query(Device).all()
     return [i for i in device if i.log_devices]
+

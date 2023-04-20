@@ -1,5 +1,5 @@
 from typing import Any
-
+from a import get_history
 from config.config_api import app, get_db
 from models.device_crude import create_device_and_url, get_all, create_log_device, get_all_logs_device
 from shemas.shemas_device import Device, UrlDevice, LogDevice
@@ -35,6 +35,7 @@ def create_device_logs(device_id: int, logs: list[LogDevice], db: Session = Depe
             "msg": "Save"
         }
     }
+
 
 
 @app.get("/all")
