@@ -1,3 +1,5 @@
+import logging
+
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
@@ -14,12 +16,13 @@ def find_value(func):
             await message.answer("Что бы прервать действие напиши: /reset", reply=False)
         else:
             await func(message, state)
+
     return validate
 
 
 async def index(message: types.Message):
     await device_group.Device.name.set()
-    await message.answer("Привет.\nЧто бы зарегистрировать API придумай ему имя.")
+    await message.answer("Привет.\nЧто бы зарегистрировать API придумай ему имя, без пробело.")
 
 
 @find_value
@@ -107,16 +110,17 @@ async def get_name_find_log(message: types.Message, state: FSMContext):
 
     async with state.proxy() as data:
         name = data['name']
+
     url = device_crude.find_logs_url(name.upper())
 
-    logs = device_crude.find_end_log(url.device_id)
-
     if url is not None:
-        if logs is not None:
-            get_history(url.url, device_id=url.device_id, offset=logs.log_time)
+        logs = device_crude.find_end_log(url.device_id)
+
+        if logs is None:
+            get_history(url.url, device_id=url.device_id)
             await message.answer("Сохранил.")
         else:
-            get_history(url.url, device_id=url.device_id)
+            get_history(url.url, device_id=url.device_id, offset=logs.log_time)
             await message.answer("Сохранил.")
     else:
         await message.answer("Такого API нет.")

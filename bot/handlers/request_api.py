@@ -3,17 +3,18 @@ import requests
 from datetime import datetime
 
 from config import config_db
-from models.device_model import LogDevice
+from models.device_model import LogDevice, Device
 
 
 def get_history(url, device_id, offset=None, db=config_db.session):
     if offset is not None:
         log_data = f'?logTime={offset}'
-        data = requests.get(url+log_data).json()
+        data = requests.get(url + log_data).json()
     else:
         data = requests.get(url).json()
+        edit_url_device(device_id, data['id_device'])
 
-    for values in data:
+    for values in data['message']:
         logs = LogDevice(
             level=values['level'],
             category=values['category'],
@@ -27,6 +28,19 @@ def get_history(url, device_id, offset=None, db=config_db.session):
 
     db.commit()
     return True
+
+
+def edit_url_device(id, company_id, db=config_db.session):
+    device = db.query(Device).filter(Device.id == id)
+    if device.scalar is not None and id is not None:
+        device.update({
+            Device.company_id: company_id
+        })
+        # db.add(urls)
+        db.commit()
+        return True
+    else:
+        return False
 
 
 def convert_data(time):

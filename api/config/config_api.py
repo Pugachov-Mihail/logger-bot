@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from .config_db import Base, engine, SessionLocal
+from .config_db import SessionLocal
 
 
 app = FastAPI()

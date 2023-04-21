@@ -22,3 +22,15 @@ session = scoped_session(SessionLocal)
 
 Base = declarative_base()
 
+
+def get_db(atr=None):
+    db = session
+    try:
+        db.add(atr)
+        db.commit()
+        db.refresh(atr)
+    except:
+        db.rollback()
+    finally:
+        db.close()
+        return atr

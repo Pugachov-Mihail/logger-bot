@@ -27,3 +27,8 @@ class Device(DeviceBase):
     class Config:
         orm_mode = True
 
+
+class ErrorLogApi(BaseModel):
+    datetime: str
+    message: str
+    url_error: int

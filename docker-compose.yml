@@ -23,8 +23,9 @@ services:
       - bot/.env
     environment:
       DEBUG: 'true'
+    restart: always
     volumes:
-      - './bot:/bot'
+      - './bot/:/bot'
 
   db:
     image: postgres:13.3
