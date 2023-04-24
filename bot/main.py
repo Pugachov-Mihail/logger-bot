@@ -20,6 +20,7 @@ def main():
     dp.register_message_handler(logs.create_name, state=device_group.Device.name)
     dp.register_message_handler(logs.create_url_device, state=device_group.Device.url)
     dp.register_message_handler(logs.create_url_error, state=device_group.Device.url_error)
+    dp.register_message_handler(logs.message_about_error, commands=['as'])
     dp.register_message_handler(logs.unknown_command)
 
 

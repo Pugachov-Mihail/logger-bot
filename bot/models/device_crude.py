@@ -1,11 +1,11 @@
-from .device_model import Device, UrlDevice, LogDevice
-from shemas import shemas_device
+from .device_model import Device, UrlDevice, LogDevice, User, ErrorLogApi
 from config import config_db
 
 
 # Сохранение имени устройства и его url
-def create_device(name):
-    device = Device(name=name)
+def create_device(name, user, db=config_db.session):
+    user = db.query(User).filter(User.id_user == user).first()
+    device = Device(name=name, user=user.id)
     config_db.get_db(device)
     return device
 
@@ -86,6 +86,29 @@ def find_end_log(device_id, db=config_db.session):
         return log
     else:
         return None
+
+
+def create_user(user_id, db=config_db.session):
+    user = db.query(User).filter(User.id_user == user_id)
+    if user.scalar() is None:
+        user = User(id_user=user_id)
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+    return user
+
+
+def observe_db_query(current, db=config_db.session):
+    model = db.query(ErrorLogApi).all() #.filter(ErrorLogApi.id == current).first()
+    return model
+
+
+def get_user_on_device(device, db=config_db.session):
+    db.query(Device).filter(Device.error_log_devices == device).first()
+
+
+
+
 
 
 

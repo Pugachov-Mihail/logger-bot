@@ -4,13 +4,11 @@ services:
   api:
     build: api
     ports:
-      - "8002:8000"
+      - "6598:8000"
     env_file:
       - api/.env
     external_links:
       - db-pg:db-pg
-    environment:
-      DEBUG: 'true'
     volumes:
       - './api/:/api'
     restart: always

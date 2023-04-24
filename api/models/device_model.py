@@ -11,7 +11,9 @@ class Device(Base):
     name = Column(String, nullable=False)
     company_id = Column(Integer)
 
+    user = Column(Integer, ForeignKey("user.id"))
     url_devices = relationship("UrlDevice", back_populates="devices")
+    user_id = relationship("User", back_populates="device_id")
     log_devices = relationship("LogDevice", back_populates="devices")
     error_log_devices = relationship("ErrorLogApi", back_populates="devices")
 
@@ -52,3 +54,12 @@ class ErrorLogApi(Base):
 
     url_error = Column(Integer, ForeignKey("device.id"))
     devices = relationship("Device", back_populates="error_log_devices")
+
+
+class User(Base):
+    __tablename__ = "user"
+
+    id = Column(Integer, primary_key=True)
+    id_user = Column(Integer)
+
+    device_id = relationship("Device", back_populates="user_id")

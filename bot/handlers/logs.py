@@ -1,11 +1,10 @@
-import logging
-
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
 from handlers.request_api import get_history
 from models import device_crude
 from states import device_group
+from config.bot_config import bot
 
 COMMAND_LIST = ["/start", "/add", "/edit", "/get_info"]
 
@@ -21,6 +20,7 @@ def find_value(func):
 
 
 async def index(message: types.Message):
+    device_crude.create_user(message['from']['id'])
     await device_group.Device.name.set()
     await message.answer("Привет.\nЧто бы зарегистрировать API придумай ему имя, без пробело.")
 
@@ -56,7 +56,7 @@ async def create_url_error(message: types.Message, state: FSMContext):
     if name == '' and url == '':
         await message.answer("Обмануть меня хочешь?")
     else:
-        device = device_crude.create_device(name.upper())
+        device = device_crude.create_device(name.upper(), message['from']['id'])
         device_crude.create_url_device(url, device)
         device_crude.create_url_error(device, url_error)
         await message.answer("Сохранил.")
@@ -112,7 +112,6 @@ async def get_name_find_log(message: types.Message, state: FSMContext):
         name = data['name']
 
     url = device_crude.find_logs_url(name.upper())
-
     if url is not None:
         logs = device_crude.find_end_log(url.device_id)
 
@@ -125,6 +124,22 @@ async def get_name_find_log(message: types.Message, state: FSMContext):
     else:
         await message.answer("Такого API нет.")
     await state.finish()
+
+
+async def observe_db():
+    while True:
+        current_id = 0
+        id_db = device_crude.observe_db_query(current_id)
+
+        if id_db > current_id:
+            current_id = id_db.id
+            device_crude.get_user_on_device(id_db)
+            await bot.send_message()
+
+async def message_about_error(message: types.Message):
+    current_id = 1
+    id_db = device_crude.observe_db_query(current_id)
+    await message.answer(id_db)
 
 
 async def reset_state(message: types.Message, state: FSMContext):

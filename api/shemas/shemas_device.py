@@ -29,6 +29,6 @@ class Device(DeviceBase):
 
 
 class ErrorLogApi(BaseModel):
-    datetime: str
+    date_time: str
     message: str
-    url_error: int
+    id_device: int

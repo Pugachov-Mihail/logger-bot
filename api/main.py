@@ -17,9 +17,14 @@ def get_all_history(db: Session = Depends(get_db)):
     return device_crude.get_all(db)
 
 
-@app.post("/set-error-api/")
-def set_error_api(error, db: Session = Depends(get_db)):
+@app.post("/set-error-api")
+def set_error_api(error: shemas_device.ErrorLogApi, db: Session = Depends(get_db)):
     return device_crude.create_eror_log(error, db)
+
+
+@app.get("/get-user")
+def get_user(db: Session = Depends(get_db)):
+    return device_crude.get_user(db)
 
 
 
