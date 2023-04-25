@@ -1,4 +1,4 @@
-from .device_model import Device, UrlDevice, LogDevice, User, ErrorLogApi
+from .device_model import Device, UrlDevice, LogDevice, User, ErrorLogApi, CounterErrorsLog
 from config import config_db
 
 
@@ -98,17 +98,17 @@ def create_user(user_id, db=config_db.session):
     return user
 
 
-def observe_db_query(current, db=config_db.session):
-    model = db.query(ErrorLogApi).all() #.filter(ErrorLogApi.id == current).first()
-    return model
+def observe_db_query(db=config_db.session):
+    counter = db.query(CounterErrorsLog).filter(CounterErrorsLog.status == False).all()
+    return counter
 
 
-def get_user_on_device(device, db=config_db.session):
-    db.query(Device).filter(Device.error_log_devices == device).first()
-
-
-
-
-
-
+def send_info(id, db=config_db.session):
+    model = db.query(CounterErrorsLog).filter(CounterErrorsLog.id == id)
+    if model.scalar is not None:
+        model.update({CounterErrorsLog.status: True})
+        db.commit()
+        return True
+    else:
+        return False
 

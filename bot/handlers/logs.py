@@ -1,3 +1,5 @@
+import asyncio
+
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
@@ -128,18 +130,16 @@ async def get_name_find_log(message: types.Message, state: FSMContext):
 
 async def observe_db():
     while True:
-        current_id = 0
-        id_db = device_crude.observe_db_query(current_id)
-
-        if id_db > current_id:
-            current_id = id_db.id
-            device_crude.get_user_on_device(id_db)
-            await bot.send_message()
-
-async def message_about_error(message: types.Message):
-    current_id = 1
-    id_db = device_crude.observe_db_query(current_id)
-    await message.answer(id_db)
+        model = device_crude.observe_db_query()
+        for i in model:
+            if i.error_log is not None:
+                content = f'Имя устройства: {i.error_log.devices.name} \n' \
+                          f'Информация об ошибке: {i.error_log.message}'
+                await bot.send_message(i.error_log.devices.user_id.id_user, content)
+                device_crude.send_info(i.id)
+            else:
+                continue
+        await asyncio.sleep(1800)
 
 
 async def reset_state(message: types.Message, state: FSMContext):

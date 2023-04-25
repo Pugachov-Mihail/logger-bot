@@ -1,5 +1,5 @@
 from config.config_db import get_db
-from models.device_model import Device, UrlDevice, LogDevice, ErrorLogApi, User
+from models.device_model import Device, UrlDevice, LogDevice, ErrorLogApi, User, CounterErrorsLog
 from shemas import shemas_device
 
 from sqlalchemy.orm import Session
@@ -46,21 +46,28 @@ def get_current_logs_device(device: int, db: Session, offset: int, limit: int):
         return None
 
 
-
 def create_eror_log(error, db: Session):
-    #Сделать сохранение компании http://192.168.111.175/device/send-log-history
-    return db.query(UrlDevice).filter(UrlDevice.device_id == error.id_device).first()
-    # if error.id_device != "":
-    #     device = db.query(UrlDevice).filter(UrlDevice.device_id == error.id_device).first()
-    #     error = ErrorLogApi(
-    #         datetime=error.date_time,
-    #         message=error.message,
-    #         device_id=device
-    #     )
-    #     db.add(error)
-    #     db.commit()
-    #     db.refresh(error)
-    # return error
+    # Сделать сохранение компании http://192.168.111.175/device/send-log-history
+    device = db.query(UrlDevice).filter(Device.company_id == error.id_device)
+    if device.scalar is not None:
+        dev = device.first()
+        if dev is not None:
+            error = ErrorLogApi(
+                datetime=error.date_time,
+                message=error.message,
+                url_error=dev.device_id
+            )
+
+            db.add(error)
+            db.commit()
+            db.refresh(error)
+            counter = CounterErrorsLog(message_id=error.id)
+            db.add(counter)
+            db.commit()
+            db.refresh(counter)
+            return error
+    else:
+        return None
 
 
 def get_user(db: Session):

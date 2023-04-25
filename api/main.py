@@ -19,7 +19,12 @@ def get_all_history(db: Session = Depends(get_db)):
 
 @app.post("/set-error-api")
 def set_error_api(error: shemas_device.ErrorLogApi, db: Session = Depends(get_db)):
-    return device_crude.create_eror_log(error, db)
+    model = device_crude.create_eror_log(error, db)
+    content = {
+        "success": True if model is not None else False,
+        "model": model.id
+    }
+    return content
 
 
 @app.get("/get-user")

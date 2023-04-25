@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 from config.config_db import Base
@@ -54,6 +54,7 @@ class ErrorLogApi(Base):
 
     url_error = Column(Integer, ForeignKey("device.id"))
     devices = relationship("Device", back_populates="error_log_devices")
+    counter = relationship("CounterErrorsLog", back_populates="error_log")
 
 
 class User(Base):
@@ -63,3 +64,13 @@ class User(Base):
     id_user = Column(Integer)
 
     device_id = relationship("Device", back_populates="user_id")
+
+
+class CounterErrorsLog(Base):
+    __tablename__ = "counter_error_log"
+
+    id = Column(Integer, primary_key=True)
+    status = Column(Boolean, default=False)
+
+    message_id = Column(Integer, ForeignKey("error_log_api.id"))
+    error_log = relationship("ErrorLogApi", back_populates="counter")

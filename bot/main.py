@@ -1,3 +1,5 @@
+import asyncio
+
 from aiogram.utils import executor
 
 from config.config_db import Base, engine
@@ -20,10 +22,11 @@ def main():
     dp.register_message_handler(logs.create_name, state=device_group.Device.name)
     dp.register_message_handler(logs.create_url_device, state=device_group.Device.url)
     dp.register_message_handler(logs.create_url_error, state=device_group.Device.url_error)
-    dp.register_message_handler(logs.message_about_error, commands=['as'])
     dp.register_message_handler(logs.unknown_command)
 
 
 if __name__ == '__main__':
     main()
+    loop = asyncio.get_event_loop()
+    loop.create_task(logs.observe_db())
     executor.start_polling(dp, skip_updates=True, on_shutdown=shutdown)
