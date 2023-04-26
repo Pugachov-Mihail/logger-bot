@@ -74,3 +74,4 @@ class CounterErrorsLog(Base):
 
     message_id = Column(Integer, ForeignKey("error_log_api.id"))
     error_log = relationship("ErrorLogApi", back_populates="counter")
+

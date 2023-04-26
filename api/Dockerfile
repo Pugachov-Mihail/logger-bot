@@ -12,4 +12,4 @@ RUN apt-get update \
 
 COPY . .
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0"]
+CMD ["python", "main.py"]

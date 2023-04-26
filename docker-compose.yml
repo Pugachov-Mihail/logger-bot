@@ -4,7 +4,7 @@ services:
   api:
     build: api
     ports:
-      - "6598:8000"
+      - "172.16.0.1:6598:8000"
     env_file:
       - api/.env
     external_links:
@@ -12,6 +12,9 @@ services:
     volumes:
       - './api/:/api'
     restart: always
+
+
+
 
   bot:
     build: bot

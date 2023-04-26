@@ -1,13 +1,15 @@
+import uvicorn
 from config.config_api import app, get_db
 from models import device_crude
 from shemas import shemas_device
 
 from sqlalchemy.orm import Session
-from fastapi import Depends, Query, Request
+from fastapi import Depends, Query
 
 
 @app.get("/get-current-device-log/{id}")
-def get_all_logs(id: int,  pages: int = Query(default=0), limit: int = Query(ge=1, default=50), db: Session = Depends(get_db)):
+def get_all_logs(id: int, pages: int = Query(default=0), limit: int = Query(ge=1, default=50),
+                 db: Session = Depends(get_db)):
     pages = pages if pages == 0 else pages * 50
     return device_crude.get_current_logs_device(id, db, pages, limit)
 
@@ -31,8 +33,6 @@ def set_error_api(error: shemas_device.ErrorLogApi, db: Session = Depends(get_db
 def get_user(db: Session = Depends(get_db)):
     return device_crude.get_user(db)
 
-
-
 # @app.post("/create")
 # def create(device: Device, url: UrlDevice, db: Session = Depends(get_db)):
 #     return create_device_and_url(db, device, url)
@@ -53,3 +53,12 @@ def get_user(db: Session = Depends(get_db)):
 #             "msg": "Save"
 #         }
 #     }
+
+
+if __name__ == '__main__':
+    uvicorn.run("main:app",
+                host="0.0.0.0",
+                reload=True,
+                ssl_keyfile="./localhost+2-key.pem",
+                ssl_certfile="./localhost+2.pem"
+                )
