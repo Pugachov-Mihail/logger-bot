@@ -81,7 +81,7 @@ def find_logs_url(name, db=config_db.session):
 def find_end_log(device_id, db=config_db.session):
     logs = db.query(LogDevice).filter(LogDevice.device_id == device_id).order_by(LogDevice.id.desc())
 
-    if logs.scalar is not None:
+    if logs.scalar() is not None:
         log = logs.first()
         return log
     else:
