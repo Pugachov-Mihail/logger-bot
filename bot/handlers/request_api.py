@@ -48,3 +48,6 @@ def convert_data(time):
         return datetime.utcfromtimestamp(time).strftime('%Y-%m-%d %H:%M:%S')
     else:
         return None
+
+def hello():
+    return requests.get("http://192.168.111.175/device/send-log-history").json()

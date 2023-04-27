@@ -3,7 +3,7 @@ import asyncio
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
-from handlers.request_api import get_history
+from handlers.request_api import get_history, hello
 from models import device_crude
 from states import device_group
 from config.bot_config import bot
@@ -148,4 +148,6 @@ async def reset_state(message: types.Message, state: FSMContext):
 
 
 async def unknown_command(message: types.Message):
+    mess = hello()
+    await message.answer(mess)
     await message.answer("Не шали, шалунишка))))))")
