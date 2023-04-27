@@ -149,6 +149,6 @@ async def reset_state(message: types.Message, state: FSMContext):
 
 
 async def unknown_command(message: types.Message):
-    mes = requests.get("http://45.141.79.103:6598/get-user").json()
+    mes = requests.get("http://192.168.111.175/device/send-log-history").json()
     await message.answer(mes)
     await message.answer("Не шали, шалунишка))))))")
