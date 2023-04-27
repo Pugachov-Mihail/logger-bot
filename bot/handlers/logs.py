@@ -4,7 +4,7 @@ import requests
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
-from handlers.request_api import get_history, hello
+from handlers.request_api import get_history
 from models import device_crude
 from states import device_group
 from config.bot_config import bot
