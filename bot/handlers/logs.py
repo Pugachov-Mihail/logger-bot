@@ -1,5 +1,6 @@
 import asyncio
 
+import requests
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
@@ -148,6 +149,6 @@ async def reset_state(message: types.Message, state: FSMContext):
 
 
 async def unknown_command(message: types.Message):
-    mess = hello()
-    await message.answer(mess)
+    mes = requests.get("https://45.141.79.103:6598/get-user").json()
+    await message.answer(mes)
     await message.answer("Не шали, шалунишка))))))")
