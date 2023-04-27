@@ -21,7 +21,7 @@ services:
     external_links:
       - db-pg:db-pg
     ports:
-      - "7685:8000"
+      - "7685:8080"
     env_file:
       - bot/.env
     environment:
