@@ -8,11 +8,17 @@ from models.device_model import LogDevice, Device
 
 def get_history(url, device_id, offset=None, db=config_db.session):
     if offset is not None:
-        log_data = f'?logTime={offset}'
-        data = requests.get(url + log_data).json()
+        try:
+           log_data = f'?logTime={offset}'
+           data = requests.get(url + log_data).json()
+        except Exception:
+            raise Exception("Тут упал")
     else:
-        data = requests.get(url).json()
-        edit_url_device(device_id, data['id_device'])
+        try:
+            data = requests.get(url).json()
+            edit_url_device(device_id, data['id_device'])
+        except Exception:
+            raise Exception("Бред")
 
     for values in data['message']:
         logs = LogDevice(
