@@ -76,4 +76,4 @@ def get_user(db: Session):
 
 
 def delete(db: Session, id):
-    return db.query(Device).filter(Device.id == id).delete()
+    return db.query(Device).filter(Device.id == id, UrlDevice.devices == id).delete()
