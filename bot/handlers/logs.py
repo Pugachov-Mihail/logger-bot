@@ -135,7 +135,8 @@ async def observe_db():
         for i in model:
             if i.error_log is not None:
                 content = f'Имя устройства: {i.error_log.devices.name} \n' \
-                          f'Информация об ошибке: {i.error_log.message}'
+                          f'Информация об ошибке: {i.error_log.message}' \
+                          f'Время ошибки: {i.error_log.datetime}'
                 await bot.send_message(i.error_log.devices.user_id.id_user, content)
                 device_crude.send_info(i.id)
             else:

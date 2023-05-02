@@ -30,7 +30,8 @@ def get_all(db: Session):
         return [{"id": i.id,
                  "name": i.name,
                  "company": i.company_id,
-                 "user": i.user_id} for i in device.all()]
+                 "user": i.user_id,
+                 "logs": i.log_devices} for i in device.all()]
     else:
         return None
 
