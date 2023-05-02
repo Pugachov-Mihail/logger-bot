@@ -32,6 +32,12 @@ def set_error_api(error: shemas_device.ErrorLogApi, db: Session = Depends(get_db
 def get_user(db: Session = Depends(get_db)):
     return device_crude.get_user(db)
 
+
+@app.delete("/delete/{id}")
+def delete(id, db: Session = Depends(get_db)):
+    return device_crude.delete(db, id)
+
+
 # @app.post("/create")
 # def create(device: Device, url: UrlDevice, db: Session = Depends(get_db)):
 #     return create_device_and_url(db, device, url)

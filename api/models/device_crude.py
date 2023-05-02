@@ -73,3 +73,7 @@ def create_eror_log(error, db: Session):
 def get_user(db: Session):
     model = db.query(User).all()
     return [i for i in model if i.device_id]
+
+
+def delete(db: Session, id):
+    return db.query(Device).filter(Device.id == id).delete()
