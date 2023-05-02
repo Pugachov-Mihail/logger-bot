@@ -76,4 +76,6 @@ def get_user(db: Session):
 
 
 def delete(db: Session, id):
-    return db.query(Device).filter(Device.id == id, UrlDevice.devices == id).delete()
+    model = db.query(Device).filter(Device.id == id).first()
+    db.delete(model)
+    db.commit()

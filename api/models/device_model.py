@@ -12,7 +12,7 @@ class Device(Base):
     company_id = Column(Integer)
 
     user = Column(Integer, ForeignKey("user.id"))
-    url_devices = relationship("UrlDevice", back_populates="devices")
+    url_devices = relationship("UrlDevice", back_populates="devices", cascade="all, delete-orphan")
     user_id = relationship("User", back_populates="device_id")
     log_devices = relationship("LogDevice", back_populates="devices")
     error_log_devices = relationship("ErrorLogApi", back_populates="devices")
