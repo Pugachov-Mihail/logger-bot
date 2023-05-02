@@ -1,4 +1,3 @@
-import uvicorn
 from config.config_api import app, get_db
 from models import device_crude
 from shemas import shemas_device
@@ -55,10 +54,10 @@ def get_user(db: Session = Depends(get_db)):
 #     }
 
 
-if __name__ == '__main__':
-    uvicorn.run("main:app",
-                host="0.0.0.0",
-                reload=True,
-                ssl_keyfile="./localhost+2-key.pem",
-                ssl_certfile="./localhost+2.pem"
-                )
+# if __name__ == '__main__':
+#     uvicorn.run("main:app",
+#                 host="0.0.0.0",
+#                 reload=True,
+#                 # ssl_keyfile="./localhost+2-key.pem",
+#                 # ssl_certfile="./localhost+2.pem"
+#                 )
